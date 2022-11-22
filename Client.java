@@ -1,10 +1,9 @@
 package application;
 
-import java.net.*;
 import java.io.*;
+import java.net.*;
 import java.util.Objects;
 import java.util.StringTokenizer;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -20,7 +19,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.application.Platform;
 import javafx.scene.text.Font;
 
-public class Client extends Thread{
+public class Client extends Thread {
     private Socket socket = null;
     private Rectangle panel;
     private static final int BOUND = 90;
@@ -45,20 +44,20 @@ public class Client extends Thread{
 
     private PrintStream printStream;
 
-    public Client(String name){
+    public Client(String name) {
         this.name = name;
     }
 
-    public void setSocket(Socket socket){
+    public void setSocket(Socket socket) {
         this.socket = socket;
     }
-    public Socket getSocket(){
+    public Socket getSocket() {
         return this.socket;
     }
-    public void setColor(int color){
+    public void setColor(int color) {
         this.color = color;
     }
-    public int getColor(){
+    public int getColor() {
         return this.color;
     }
 
@@ -94,14 +93,14 @@ public class Client extends Thread{
     @Override
     public void run() {
         String line = null;
-        while (true){
+        while (true) {
             try {
                 line = inputStream.readLine();
                 System.out.println(line);
                 StringTokenizer msgs = new StringTokenizer(line, ":");
                 String dir = msgs.nextToken();
                 String value;
-                if (dir.equalsIgnoreCase("MATCH")){
+                if (dir.equalsIgnoreCase("MATCH")) {
                     System.out.println(line);
                     String oppo = msgs.nextToken();
                     opponent = oppo;
@@ -115,8 +114,7 @@ public class Client extends Thread{
                     });
                     String clr = msgs.nextToken();
                     color = Integer.parseInt(clr);
-                }
-                else if (dir.equalsIgnoreCase("Await")){
+                } else if (dir.equalsIgnoreCase("Await")){
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -125,8 +123,7 @@ public class Client extends Thread{
                             wait.setStyle("-fx-alignment: Center");
                         }
                     });
-                }
-                else if (dir.equalsIgnoreCase("MSG")){
+                } else if (dir.equalsIgnoreCase("MSG")){
                     value = msgs.nextToken();
 
                     current = color;
@@ -139,13 +136,11 @@ public class Client extends Thread{
                         }
                     });
                     play();
-                }
-                else if (dir.equalsIgnoreCase("move")) {
+                } else if (dir.equalsIgnoreCase("move")) {
                     value = msgs.nextToken();
                     current = color;
                     play();
-                }
-                else if (dir.equalsIgnoreCase("you")) {
+                } else if (dir.equalsIgnoreCase("you")) {
                     value = msgs.nextToken();
                     Platform.runLater(new Runnable() {
                         @Override
@@ -153,8 +148,7 @@ public class Client extends Thread{
                             wel.setText("Your port: "+value);
                         }
                     });
-                }
-                else if (dir.equalsIgnoreCase("Disconnected")) {
+                } else if (dir.equalsIgnoreCase("Disconnected")) {
                     value = msgs.nextToken();
                     Platform.runLater(new Runnable() {
                         @Override
@@ -164,25 +158,23 @@ public class Client extends Thread{
                             panel.setOnMouseClicked(null);
                         }
                     });
-                }
-                else if (dir.equalsIgnoreCase("judge")) {
+                } else if (dir.equalsIgnoreCase("judge")) {
                     value = msgs.nextToken();
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
                             if (!Objects.equals(value, "Draw")) {
                                 wait.setText("You " + value);
-                            }else wait.setText(value);
+                            } else wait.setText(value);
                             wait.setFont(Font.font("Cambria", 32));
                             turn.setVisible(false);
                             panel.setOnMouseClicked(null);
                         }
                     });
-                }
-                else if (dir.equalsIgnoreCase("Quit")) {
+                } else if (dir.equalsIgnoreCase("Quit")) {
                     value = msgs.nextToken();
                     String ou;
-                    if (Integer.parseInt(value) != color){
+                    if (Integer.parseInt(value) != color) {
                         ou = "Opponent quit.";
                         Platform.runLater(new Runnable() {
                             @Override
@@ -192,8 +184,7 @@ public class Client extends Thread{
                                 panel.setOnMouseClicked(null);
                             }
                         });
-                    }
-                    else {
+                    } else {
                         ou = "You quit.";
                         Platform.runLater(new Runnable() {
                             @Override
@@ -235,7 +226,7 @@ public class Client extends Thread{
                 StringTokenizer s = new StringTokenizer(value, " ");
                 int i = Integer.parseInt(s.nextToken());
                 int j = Integer.parseInt(s.nextToken());
-                refreshBoard(i, j, color == 1?2:1);
+                refreshBoard(i, j, color == 1 ? 2 : 1);
                 System.out.println(color);
             }
         });
@@ -292,7 +283,7 @@ public class Client extends Thread{
         }
     }
 
-    private void drawCircle (int i, int j) {
+    private void drawCircle(int i, int j) {
         Circle circle = new Circle();
         base_square.getChildren().add(circle);
         circle.setCenterX(i * BOUND + BOUND / 2.0 + OFFSET);

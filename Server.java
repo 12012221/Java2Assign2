@@ -30,18 +30,20 @@ public class Server {
             e.printStackTrace();
         }
     }
-    class Handle extends Thread{
+
+    class Handle extends Thread {
         String name1;
         String name2;
+
         public void run() {
-            while (true){
-                if (players.size() < 2){
+            while (true) {
+                if (players.size() < 2) {
                     try {
                         socket = server.accept();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    String nn = "port "+String.valueOf(socket.getPort());
+                    String nn = "port " + String.valueOf(socket.getPort());
                     Player player = new Player(socket, nn);
                     synchronized (new Handle()) {
                         players.add(player);
@@ -49,8 +51,7 @@ public class Server {
                             player.send("Await:Please wait");
                     }
                     player.start();
-                }
-                else {
+                } else {
                     try {
                         Thread.sleep(500);
                     } catch (InterruptedException e) {
@@ -60,27 +61,28 @@ public class Server {
             }
         }
     }
+
     class StartGame extends Thread{
         public void run() {
-            while (true){
+            while (true) {
                 Player x = null;
                 Player o = null;
 
                 synchronized (new StartGame()) {
-                    for (Player player:players){
-                        if (!player.con){
+                    for (Player player : players){
+                        if (!player.con) {
                             x = player;
                             break;
                         }
                     }
-                    for (Player player:players){
-                        if (player != x && !player.con){
+                    for (Player player : players) {
+                        if (player != x && !player.con) {
                             o = player;
                             break;
                         }
                     }
                 }
-                if (x != null && o != null){
+                if (x != null && o != null) {
                     System.out.println("!212121");
                     x.con = true;
                     x.color = 1;
@@ -95,7 +97,8 @@ public class Server {
             }
         }
     }
-    class Player extends Thread{
+
+    class Player extends Thread {
         Socket s;
         String name;
         InetAddress ip;
@@ -105,7 +108,7 @@ public class Server {
 
         Boolean con = false;
 
-        public void send(String msg){
+        public void send(String msg) {
             printStream.println(msg);
             printStream.flush();
         }
@@ -138,33 +141,41 @@ public class Server {
                                 if (board[i][0] == board[i][1] && board[i][1] == board[i][2]) {
                                     b = true;
                                     for (Player player : players) {
-                                        if (board[i][0] == player.color)
+                                        if (board[i][0] == player.color) {
                                             player.send("judge:win");
-                                        else if (board[i][0] != 0) player.send("judge:lose");
+                                        } else if (board[i][0] != 0) {
+                                            player.send("judge:lose");
+                                        }
                                     }
                                 } else if (board[0][i] == board[1][i] && board[1][i] == board[2][i]) {
                                     b = true;
                                     for (Player player : players) {
-                                        if (board[0][i] == player.color)
+                                        if (board[0][i] == player.color) {
                                             player.send("judge:win");
-                                        else if (board[0][i] != 0) player.send("judge:lose");
+                                        } else if (board[0][i] != 0) {
+                                            player.send("judge:lose");
+                                        }
                                     }
                                 }
                             }
                             if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
                                 b = true;
                                 for (Player player : players) {
-                                    if (board[0][0] == player.color)
+                                    if (board[0][0] == player.color) {
                                         player.send("judge:win");
-                                    else if (board[0][0] != 0) player.send("judge:lose");
+                                    } else if (board[0][0] != 0) {
+                                        player.send("judge:lose");
+                                    }
                                 }
                             }
                             if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
                                 b = true;
                                 for (Player player : players) {
-                                    if (board[2][0] == player.color)
+                                    if (board[2][0] == player.color) {
                                         player.send("judge:win");
-                                    else if (board[2][0] != 0) player.send("judge:lose");
+                                    } else if (board[2][0] != 0) {
+                                        player.send("judge:lose");
+                                    }
                                 }
                             }
                             for (int i = 0; i < 3; i++) {
@@ -205,7 +216,8 @@ public class Server {
             }
         }
     }
-    public synchronized void quit(Player player){
+
+    public synchronized void quit(Player player) {
         for (Player cplayer : players) {
             cplayer.send("QUIT:" + player.color);
         }

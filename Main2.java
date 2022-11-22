@@ -9,11 +9,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
-
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import javafx.stage.WindowEvent;
 import java.net.Socket;
 
 public class Main2 extends Application {
@@ -61,10 +60,11 @@ public class Main2 extends Application {
                             client2.setWait(controller2.wait);
                             controller2.inp.setVisible(false);
                             controller2.log.setVisible(false);
-                            client2.setDs(new DataInputStream(client2.getSocket().getInputStream()));
+                            client2.setDs(new DataInputStream(client2.getSocket()
+                                    .getInputStream()));
                             client2.setPs(new PrintStream(client2.getSocket().getOutputStream()));
                             client2.start();
-                            client2.getPs().println("name:"+controller2.inp.getText());
+                            client2.getPs().println("name:" + controller2.inp.getText());
                             client2.getPs().flush();
                         } catch (IOException e) {
                             e.printStackTrace();
